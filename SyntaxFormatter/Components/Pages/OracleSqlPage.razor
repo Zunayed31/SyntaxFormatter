@@ -1,0 +1,26 @@
+@page "/oracle-sql"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>Oracle SQL Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="Oracle SQL Formatter"
+                Subtitle="Format Oracle PL/SQL queries with uppercase keywords and clean structure."
+                InputPlaceholder="Paste Oracle SQL / PL/SQL here..."
+                OutputPlaceholder="Formatted SQL will appear here..."
+                FormatAsync="FormatAsync"/>
+
+@code {
+    private async Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<string>("syntaxFormatter.formatSql", input, "plsql");
+            return (result, "");
+        }
+        catch (Exception ex)
+        {
+            return ("", $"Formatting error: {ex.Message}");
+        }
+    }
+}

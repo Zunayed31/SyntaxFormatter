@@ -1,0 +1,26 @@
+@page "/html"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>HTML Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="HTML Formatter"
+                Subtitle="Beautify and format HTML markup with proper nesting and indentation."
+                InputPlaceholder="Paste HTML here..."
+                OutputPlaceholder="Formatted HTML will appear here..."
+                FormatAsync="FormatAsync"/>
+
+@code {
+    private async Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<string>("syntaxFormatter.formatHtml", input);
+            return (result, "");
+        }
+        catch (Exception ex)
+        {
+            return ("", $"Formatting error: {ex.Message}");
+        }
+    }
+}

@@ -1,0 +1,26 @@
+@page "/javascript"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>JavaScript Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="JavaScript Formatter"
+                Subtitle="Beautify JavaScript code with consistent indentation and spacing."
+                InputPlaceholder="Paste JavaScript code here..."
+                OutputPlaceholder="Formatted JavaScript will appear here..."
+                FormatAsync="FormatAsync"/>
+
+@code {
+    private async Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<string>("syntaxFormatter.formatJs", input);
+            return (result, "");
+        }
+        catch (Exception ex)
+        {
+            return ("", $"Formatting error: {ex.Message}");
+        }
+    }
+}

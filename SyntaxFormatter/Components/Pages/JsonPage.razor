@@ -1,0 +1,43 @@
+@page "/json"
+@rendermode InteractiveServer
+@using System.Text.Json
+@using System.Text.Encodings.Web
+
+<PageTitle>JSON Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="JSON Formatter"
+                Subtitle="Format and validate JSON with syntax error detection and minification."
+                InputPlaceholder="Paste unformatted JSON here..."
+                OutputPlaceholder="Formatted JSON will appear here..."
+                FormatAsync="FormatAsync"
+                MinifyAsync="MinifyAsync"/>
+
+@code {
+    private Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var doc = JsonDocument.Parse(input, new JsonDocumentOptions { AllowTrailingCommas = true, CommentHandling = JsonCommentHandling.Skip });
+            var result = JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+            return Task.FromResult((result, ""));
+        }
+        catch (JsonException ex)
+        {
+            return Task.FromResult(("", $"Invalid JSON: {ex.Message}"));
+        }
+    }
+
+    private Task<(string Result, string Error)> MinifyAsync(string input)
+    {
+        try
+        {
+            var doc = JsonDocument.Parse(input);
+            var result = JsonSerializer.Serialize(doc, new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+            return Task.FromResult((result, ""));
+        }
+        catch (JsonException ex)
+        {
+            return Task.FromResult(("", $"Invalid JSON: {ex.Message}"));
+        }
+    }
+}

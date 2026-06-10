@@ -1,0 +1,76 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <nav class="sidebar">
+        <a class="sidebar-brand" href="/">
+            <i class="bi bi-lightning-charge-fill brand-icon"></i>
+            <span class="brand-text">SyntaxFormatter</span>
+        </a>
+
+        <ul class="nav-list">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                    <i class="bi bi-house nav-icon"></i>
+                    <span>Home</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/json">
+                    <i class="bi bi-braces nav-icon"></i>
+                    <span>JSON</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/javascript">
+                    <i class="bi bi-code-slash nav-icon"></i>
+                    <span>JavaScript</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/oracle-sql">
+                    <i class="bi bi-database nav-icon"></i>
+                    <span>Oracle SQL</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/mysql">
+                    <i class="bi bi-table nav-icon"></i>
+                    <span>MySQL</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/mssql">
+                    <i class="bi bi-server nav-icon"></i>
+                    <span>MSSQL</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/yaml">
+                    <i class="bi bi-file-earmark-code nav-icon"></i>
+                    <span>YAML</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/html">
+                    <i class="bi bi-file-code nav-icon"></i>
+                    <span>HTML</span>
+                </NavLink>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="main-wrapper">
+        <header class="top-bar">
+            <ThemeToggle />
+        </header>
+        <main class="main-content">
+            @Body
+        </main>
+    </div>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

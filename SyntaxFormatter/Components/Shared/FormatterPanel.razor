@@ -1,0 +1,122 @@
+<div class="formatter-container">
+    <div class="formatter-header">
+        <h1 class="formatter-title">@Title</h1>
+        <p class="formatter-subtitle">@Subtitle</p>
+    </div>
+
+    <div class="formatter-panels">
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-label">Input</span>
+                <div class="panel-actions">
+                    <button class="btn-action" @onclick="Clear">Clear</button>
+                    <button class="btn-action btn-primary-action" @onclick="DoFormat" disabled="@_busy">
+                        @(_busy ? "Formatting…" : "Format ▶")
+                    </button>
+                </div>
+            </div>
+            <textarea class="code-textarea"
+                      placeholder="@InputPlaceholder"
+                      value="@_input"
+                      @oninput="@(e => _input = e.Value?.ToString() ?? string.Empty)"
+                      spellcheck="false"></textarea>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-label">Output</span>
+                <div class="panel-actions">
+                    @if (!string.IsNullOrEmpty(_output))
+                    {
+                        <button class="btn-action" @onclick="Copy">@_copyLabel</button>
+                        @if (MinifyAsync != null)
+                        {
+                            <button class="btn-action" @onclick="DoMinify" disabled="@_busy">Minify</button>
+                        }
+                    }
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(_error))
+            {
+                <div class="error-box">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <span>@_error</span>
+                </div>
+            }
+            <textarea class="code-textarea output-textarea @(_isError ? "error-border" : "")"
+                      readonly
+                      spellcheck="false"
+                      value="@_output"
+                      placeholder="@OutputPlaceholder"></textarea>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter, EditorRequired] public string Subtitle { get; set; } = "";
+    [Parameter] public string InputPlaceholder { get; set; } = "Paste your code here...";
+    [Parameter] public string OutputPlaceholder { get; set; } = "Formatted output will appear here...";
+    [Parameter, EditorRequired] public Func<string, Task<(string Result, string Error)>> FormatAsync { get; set; } = default!;
+    [Parameter] public Func<string, Task<(string Result, string Error)>>? MinifyAsync { get; set; }
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private string _input = "";
+    private string _output = "";
+    private string _error = "";
+    private string _copyLabel = "Copy";
+    private bool _isError = false;
+    private bool _busy = false;
+
+    private async Task DoFormat()
+    {
+        if (_busy) return;
+        _busy = true;
+        _error = "";
+        _isError = false;
+        if (string.IsNullOrWhiteSpace(_input))
+        {
+            _output = "";
+            _busy = false;
+            return;
+        }
+        try
+        {
+            var (result, error) = await FormatAsync(_input);
+            if (!string.IsNullOrEmpty(error)) { _isError = true; _error = error; _output = ""; }
+            else { _output = result; }
+        }
+        finally { _busy = false; }
+    }
+
+    private async Task DoMinify()
+    {
+        if (MinifyAsync == null || string.IsNullOrWhiteSpace(_output) || _busy) return;
+        _busy = true;
+        _error = "";
+        _isError = false;
+        try
+        {
+            var (result, error) = await MinifyAsync(_output);
+            if (!string.IsNullOrEmpty(error)) { _isError = true; _error = error; }
+            else { _output = result; }
+        }
+        finally { _busy = false; }
+    }
+
+    private void Clear()
+    {
+        _input = _output = _error = "";
+        _isError = false;
+        _copyLabel = "Copy";
+    }
+
+    private async Task Copy()
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", _output);
+        _copyLabel = "Copied!";
+        await Task.Delay(2000);
+        _copyLabel = "Copy";
+    }
+}

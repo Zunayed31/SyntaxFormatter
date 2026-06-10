@@ -1,0 +1,26 @@
+@page "/mysql"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>MySQL Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="MySQL Formatter"
+                Subtitle="Format MySQL queries, stored procedures and schema definitions."
+                InputPlaceholder="Paste MySQL here..."
+                OutputPlaceholder="Formatted SQL will appear here..."
+                FormatAsync="FormatAsync"/>
+
+@code {
+    private async Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<string>("syntaxFormatter.formatSql", input, "mysql");
+            return (result, "");
+        }
+        catch (Exception ex)
+        {
+            return ("", $"Formatting error: {ex.Message}");
+        }
+    }
+}

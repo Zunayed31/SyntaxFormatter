@@ -1,0 +1,30 @@
+@page "/yaml"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>YAML Formatter — SyntaxFormatter</PageTitle>
+
+<FormatterPanel Title="YAML Formatter"
+                Subtitle="Parse and pretty-print YAML documents with consistent indentation."
+                InputPlaceholder="Paste YAML here..."
+                OutputPlaceholder="Formatted YAML will appear here..."
+                FormatAsync="FormatAsync"/>
+
+@code {
+    private async Task<(string Result, string Error)> FormatAsync(string input)
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<string>("syntaxFormatter.formatYaml", input);
+            return (result, "");
+        }
+        catch (JSException ex)
+        {
+            return ("", $"Invalid YAML: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return ("", $"Formatting error: {ex.Message}");
+        }
+    }
+}
