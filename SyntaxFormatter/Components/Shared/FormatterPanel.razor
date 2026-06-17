@@ -39,8 +39,7 @@
                 <textarea class="code-textarea"
                           id="sf-input-ta"
                           placeholder="@InputPlaceholder"
-                          value="@_input"
-                          @oninput="OnInput"
+                          @bind="_input" @bind:event="oninput"
                           @onkeydown="HandleKeyDown"
                           @onscroll="SyncInputLines"
                           spellcheck="false"></textarea>
@@ -117,10 +116,7 @@
     private int InputLineCount => string.IsNullOrEmpty(_input) ? 1 : _input.Split('\n').Length;
     private int OutputLineCount => string.IsNullOrEmpty(_output) ? 1 : _output.Split('\n').Length;
 
-    private void OnInput(ChangeEventArgs e)
-    {
-        _input = e.Value?.ToString() ?? string.Empty;
-    }
+    // Use @bind on the textarea to keep _input in sync with the UI.
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
