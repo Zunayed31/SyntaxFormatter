@@ -11,5 +11,10 @@ window.syntaxFormatter = {
     formatYaml: function (code) {
         var parsed = jsyaml.load(code);
         return jsyaml.dump(parsed, { indent: 2, lineWidth: -1, noRefs: true });
+    },
+    syncScroll: function (sourceId, targetId) {
+        var src = document.getElementById(sourceId);
+        var tgt = document.getElementById(targetId);
+        if (src && tgt) tgt.scrollTop = src.scrollTop;
     }
 };

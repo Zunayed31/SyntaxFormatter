@@ -1,56 +1,103 @@
 @page "/"
-@rendermode InteractiveServer
 
 <PageTitle>Syntax Formatter</PageTitle>
 
 <div class="landing-container">
+    <div class="landing-blob-1"></div>
+    <div class="landing-blob-2"></div>
+
     <div class="landing-hero">
-        <h1 class="landing-title">Syntax Formatter</h1>
-        <p class="landing-subtitle">A clean, fast formatter for developers. Paste your code and get it formatted instantly — no sign-up required.</p>
+        <div class="hero-badge">
+            <i class="bi bi-lightning-charge-fill hero-badge-icon"></i>
+            <span class="hero-badge-text">Developer tools, simplified</span>
+        </div>
+        <h1 class="landing-title">Format any code,<br/>instantly.</h1>
+        <p class="landing-subtitle">Paste your code and get it formatted in one click — no sign-up, no installs. Seven formatters, one clean interface.</p>
     </div>
 
     <div class="cards-grid">
-        <a href="/json" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-braces"></i></div>
+        <a href="/json" class="formatter-card" onmouseenter="this.style.borderColor='#8B5CF6';this.style.boxShadow='0 10px 40px rgba(124,58,237,0.2)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);box-shadow:0 4px 14px rgba(124,58,237,0.35)">
+                <i class="bi bi-braces"></i>
+            </div>
             <h3 class="card-title">JSON</h3>
-            <p class="card-desc">Format, validate and minify JSON with detailed syntax error messages.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">Format, validate and minify with detailed syntax error messages.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#8B5CF6;background:rgba(139,92,246,0.1)">.json</span>
+                <span class="card-cta" style="color:#8B5CF6">Open →</span>
+            </div>
         </a>
-        <a href="/javascript" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-code-slash"></i></div>
+
+        <a href="/javascript" class="formatter-card" onmouseenter="this.style.borderColor='#F59E0B';this.style.boxShadow='0 10px 40px rgba(245,158,11,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#D97706,#FCD34D);box-shadow:0 4px 14px rgba(217,119,6,0.35)">
+                <i class="bi bi-code-slash"></i>
+            </div>
             <h3 class="card-title">JavaScript</h3>
-            <p class="card-desc">Beautify JavaScript code with consistent indentation and spacing.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">Beautify code with consistent indentation and spacing.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#D97706;background:rgba(217,119,6,0.1)">.js</span>
+                <span class="card-cta" style="color:#D97706">Open →</span>
+            </div>
         </a>
-        <a href="/oracle-sql" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-database"></i></div>
+
+        <a href="/oracle-sql" class="formatter-card" onmouseenter="this.style.borderColor='#10B981';this.style.boxShadow='0 10px 40px rgba(16,185,129,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#059669,#34D399);box-shadow:0 4px 14px rgba(5,150,105,0.35)">
+                <i class="bi bi-database"></i>
+            </div>
             <h3 class="card-title">Oracle SQL</h3>
-            <p class="card-desc">Format Oracle PL/SQL queries with uppercase keywords and clean structure.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">PL/SQL with uppercase keywords and clean structure.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#059669;background:rgba(5,150,105,0.1)">.sql</span>
+                <span class="card-cta" style="color:#059669">Open →</span>
+            </div>
         </a>
-        <a href="/mysql" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-table"></i></div>
+
+        <a href="/mysql" class="formatter-card" onmouseenter="this.style.borderColor='#0EA5E9';this.style.boxShadow='0 10px 40px rgba(14,165,233,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#0284C7,#38BDF8);box-shadow:0 4px 14px rgba(2,132,199,0.35)">
+                <i class="bi bi-table"></i>
+            </div>
             <h3 class="card-title">MySQL</h3>
-            <p class="card-desc">Format MySQL queries, stored procedures and schema definitions.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">Queries, stored procedures and schema definitions.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#0284C7;background:rgba(2,132,199,0.1)">.sql</span>
+                <span class="card-cta" style="color:#0284C7">Open →</span>
+            </div>
         </a>
-        <a href="/mssql" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-server"></i></div>
+
+        <a href="/mssql" class="formatter-card" onmouseenter="this.style.borderColor='#6366F1';this.style.boxShadow='0 10px 40px rgba(99,102,241,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#4338CA,#818CF8);box-shadow:0 4px 14px rgba(67,56,202,0.35)">
+                <i class="bi bi-server"></i>
+            </div>
             <h3 class="card-title">MSSQL</h3>
-            <p class="card-desc">Format Microsoft SQL Server T-SQL statements and stored procedures.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">T-SQL and Microsoft SQL Server procedures.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#4338CA;background:rgba(67,56,202,0.1)">.sql</span>
+                <span class="card-cta" style="color:#4338CA">Open →</span>
+            </div>
         </a>
-        <a href="/yaml" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-file-earmark-code"></i></div>
+
+        <a href="/yaml" class="formatter-card" onmouseenter="this.style.borderColor='#F59E0B';this.style.boxShadow='0 10px 40px rgba(245,158,11,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#B45309,#FBBF24);box-shadow:0 4px 14px rgba(180,83,9,0.35)">
+                <i class="bi bi-file-earmark-code"></i>
+            </div>
             <h3 class="card-title">YAML</h3>
-            <p class="card-desc">Parse and pretty-print YAML documents with consistent indentation.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">Parse and pretty-print with consistent indentation.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#B45309;background:rgba(180,83,9,0.1)">.yaml</span>
+                <span class="card-cta" style="color:#B45309">Open →</span>
+            </div>
         </a>
-        <a href="/html" class="formatter-card">
-            <div class="card-icon"><i class="bi bi-file-code"></i></div>
+
+        <a href="/html" class="formatter-card" onmouseenter="this.style.borderColor='#F43F5E';this.style.boxShadow='0 10px 40px rgba(244,63,94,0.18)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='';this.style.boxShadow='';this.style.transform=''">
+            <div class="card-icon-box" style="background:linear-gradient(135deg,#BE123C,#FB7185);box-shadow:0 4px 14px rgba(190,18,60,0.35)">
+                <i class="bi bi-file-code"></i>
+            </div>
             <h3 class="card-title">HTML</h3>
-            <p class="card-desc">Beautify and format HTML markup with proper nesting and indentation.</p>
-            <span class="card-cta">Open →</span>
+            <p class="card-desc">Beautify markup with proper nesting and indentation.</p>
+            <div class="card-footer">
+                <span class="card-ext" style="color:#BE123C;background:rgba(190,18,60,0.1)">.html</span>
+                <span class="card-cta" style="color:#BE123C">Open →</span>
+            </div>
         </a>
     </div>
 </div>

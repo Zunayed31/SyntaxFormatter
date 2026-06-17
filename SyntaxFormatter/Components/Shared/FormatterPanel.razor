@@ -1,7 +1,17 @@
 <div class="formatter-container">
-    <div class="formatter-header">
-        <h1 class="formatter-title">@Title</h1>
-        <p class="formatter-subtitle">@Subtitle</p>
+    <div class="formatter-breadcrumb">
+        <a class="breadcrumb-home" href="/">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-active">@FormatterName</span>
+    </div>
+
+    <div class="formatter-title-row">
+        <h1 class="formatter-title">@FormatterName Formatter</h1>
+        <div class="formatter-title-divider"></div>
+        @if (!string.IsNullOrEmpty(Tag))
+        {
+            <span class="formatter-tag">@Tag</span>
+        }
     </div>
 
     <div class="formatter-panels">
@@ -10,16 +20,35 @@
                 <span class="panel-label">Input</span>
                 <div class="panel-actions">
                     <button class="btn-action" @onclick="Clear">Clear</button>
-                    <button class="btn-action btn-primary-action" @onclick="DoFormat" disabled="@_busy">
-                        @(_busy ? "Formatting…" : "Format ▶")
+                    <button class="btn-primary-action" @onclick="DoFormat" disabled="@_busy">
+                        @(_busy ? "Formatting…" : "Format")
+                        @if (!_busy)
+                        {
+                            <span class="btn-kbd">Ctrl ↵</span>
+                        }
                     </button>
                 </div>
             </div>
-            <textarea class="code-textarea"
-                      placeholder="@InputPlaceholder"
-                      value="@_input"
-                      @oninput="@(e => _input = e.Value?.ToString() ?? string.Empty)"
-                      spellcheck="false"></textarea>
+            <div class="panel-body">
+                <div class="line-numbers" id="sf-input-lines">
+                    @for (var i = 1; i <= InputLineCount; i++)
+                    {
+                        <div>@i</div>
+                    }
+                </div>
+                <textarea class="code-textarea"
+                          id="sf-input-ta"
+                          placeholder="@InputPlaceholder"
+                          value="@_input"
+                          @oninput="OnInput"
+                          @onkeydown="HandleKeyDown"
+                          @onscroll="SyncInputLines"
+                          spellcheck="false"></textarea>
+            </div>
+            <div class="stats-bar">
+                <span>@InputLabel</span>
+                <span>@(_input.Length) chars · @InputLineCount lines</span>
+            </div>
         </div>
 
         <div class="panel">
@@ -43,18 +72,34 @@
                     <span>@_error</span>
                 </div>
             }
-            <textarea class="code-textarea output-textarea @(_isError ? "error-border" : "")"
-                      readonly
-                      spellcheck="false"
-                      value="@_output"
-                      placeholder="@OutputPlaceholder"></textarea>
+            <div class="panel-body">
+                <div class="line-numbers" id="sf-output-lines">
+                    @for (var i = 1; i <= OutputLineCount; i++)
+                    {
+                        <div>@i</div>
+                    }
+                </div>
+                <textarea class="code-textarea output-textarea @(_isError ? "error-border" : "")"
+                          id="sf-output-ta"
+                          readonly
+                          spellcheck="false"
+                          value="@_output"
+                          @onscroll="SyncOutputLines"
+                          placeholder="@OutputPlaceholder"></textarea>
+            </div>
+            <div class="stats-bar">
+                <span>@OutputLabel</span>
+                <span>@(_output.Length) chars · @OutputLineCount lines</span>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
-    [Parameter, EditorRequired] public string Title { get; set; } = "";
-    [Parameter, EditorRequired] public string Subtitle { get; set; } = "";
+    [Parameter, EditorRequired] public string FormatterName { get; set; } = "";
+    [Parameter] public string Tag { get; set; } = "";
+    [Parameter] public string InputLabel { get; set; } = "Plain";
+    [Parameter] public string OutputLabel { get; set; } = "Formatted";
     [Parameter] public string InputPlaceholder { get; set; } = "Paste your code here...";
     [Parameter] public string OutputPlaceholder { get; set; } = "Formatted output will appear here...";
     [Parameter, EditorRequired] public Func<string, Task<(string Result, string Error)>> FormatAsync { get; set; } = default!;
@@ -69,18 +114,27 @@
     private bool _isError = false;
     private bool _busy = false;
 
+    private int InputLineCount => string.IsNullOrEmpty(_input) ? 1 : _input.Split('\n').Length;
+    private int OutputLineCount => string.IsNullOrEmpty(_output) ? 1 : _output.Split('\n').Length;
+
+    private void OnInput(ChangeEventArgs e)
+    {
+        _input = e.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && (e.CtrlKey || e.MetaKey))
+            await DoFormat();
+    }
+
     private async Task DoFormat()
     {
         if (_busy) return;
         _busy = true;
         _error = "";
         _isError = false;
-        if (string.IsNullOrWhiteSpace(_input))
-        {
-            _output = "";
-            _busy = false;
-            return;
-        }
+        if (string.IsNullOrWhiteSpace(_input)) { _output = ""; _busy = false; return; }
         try
         {
             var (result, error) = await FormatAsync(_input);
@@ -118,5 +172,15 @@
         _copyLabel = "Copied!";
         await Task.Delay(2000);
         _copyLabel = "Copy";
+    }
+
+    private async Task SyncInputLines()
+    {
+        await JS.InvokeVoidAsync("syntaxFormatter.syncScroll", "sf-input-ta", "sf-input-lines");
+    }
+
+    private async Task SyncOutputLines()
+    {
+        await JS.InvokeVoidAsync("syntaxFormatter.syncScroll", "sf-output-ta", "sf-output-lines");
     }
 }
