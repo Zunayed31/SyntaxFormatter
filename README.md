@@ -10,7 +10,7 @@ A small Blazor-based web app to quickly format and validate common code and data
 - YAML: parse and reserialize YAML using js-yaml
 
 ## Tech stack
-- .NET 10, Blazor (interactive server rendering)
+- .NET 10, Blazor WebAssembly (runs entirely in the browser; hosted on GitHub Pages)
 - JavaScript libraries included: js-beautify, sql-formatter, js-yaml
 - Static assets and client formatters located in wwwroot
 
@@ -20,17 +20,16 @@ A small Blazor-based web app to quickly format and validate common code and data
    cd SyntaxFormatter
    dotnet build
    dotnet run
-3. Open https://localhost:5001 or http://localhost:5000 (default ASP.NET Core ports)
+3. Open the URL printed by `dotnet run` (see `Properties/launchSettings.json`)
 
-## Docker
-A Dockerfile is included. To build and run the container:
-
-  docker build -t syntaxformatter .
-  docker run -p 5000:80 syntaxformatter
+## Deploy to GitHub Pages
+Pushing to the `site` branch runs `.github/workflows/deploy-pages.yml`, which publishes the app and deploys it to GitHub Pages.
+One-time setup: in the repository go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
+The site is then served at `https://<user>.github.io/<repo>/`.
 
 ## Notes
-- The app uses Blazor interactive server rendering (see `@rendermode` in pages).
-- Client-side formatting is implemented in `wwwroot/formatters.js` and relies on third-party libraries loaded in the app shell (`App.razor`).
+- The app is a standalone Blazor WebAssembly app; the HTML shell is `wwwroot/index.html`.
+- Client-side formatting is implemented in `wwwroot/formatters.js` and relies on third-party libraries loaded in the app shell (`wwwroot/index.html`).
 
 ## Contributing
 Bug reports and pull requests are welcome. Keep changes small and focused.
